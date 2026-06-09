@@ -28,7 +28,7 @@ For Train:
 > **Note:** `train.py` uses the **warm-start configuration** by default.
 > If you would like to test the **cold-start setting**, please replace the training, validation, and test paths with the corresponding cold-start paths, and modify the parameter configuration according to the descriptions provided in the paper.
 >
-> To directly reproduce the results reported in the paper, the model weights can be downloaded from the provided **model link**. We will release all trained weights for both the **warm-start** and **cold-start** settings.
+> To directly reproduce the results reported in the paper, the model weights can be downloaded from the provided **[model link](https://pan.baidu.com/s/1TtEr-CSArlqpLmpAjuaf5A?pwd=0000)**. We will release all trained weights for both the **warm-start** and **cold-start** settings.
 # 3. Concat
 Thank you for your interest in our work!
 
