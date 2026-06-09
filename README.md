@@ -21,20 +21,14 @@ Of course, you can create your environment by env.yaml:
 Dataset for MECON can be downloaded from [DSN-DDI](https://doi.org/10.1093/bib/bbac597).
 
 ### 2.2. Useage 
-For training:
+For Train:
 ```sh
     $ python train.py
-    By default, the training script uses Gdataset. To switch to another dataset, specify the --data_name argument:
-
-    python train.py --data_name Cdataset
-
-    or
-
-    python train.py --data_name Ldataset
-
-    Other hyperparameters can also be modified using the same command-line format.
 ```
-
+> **Note:** `train.py` uses the **warm-start configuration** by default.
+> If you would like to test the **cold-start setting**, please replace the training, validation, and test paths with the corresponding cold-start paths, and modify the parameter configuration according to the descriptions provided in the paper.
+>
+> To directly reproduce the results reported in the paper, the model weights can be downloaded from the provided **model link**. We will release all trained weights for both the **warm-start** and **cold-start** settings.
 # 3. Concat
 Thank you for your interest in our work!
 
