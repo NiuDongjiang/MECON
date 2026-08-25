@@ -412,7 +412,7 @@ for it in [30]:
 
     train(
         model, model_mol, model_kg,
-        train_data_loader, test_data_loader,
+        train_data_loader, val_data_loader,
         loss, optimizer, n_epochs, device, scheduler
     )
 
