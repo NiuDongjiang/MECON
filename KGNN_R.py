@@ -230,7 +230,6 @@ class HHGNN(nn.Module):
         if node_mask is not None:
             adj = adj * node_mask.float().unsqueeze(-1)
 
-        # 防止出现全 0 行导致后续 0/0：加 eps 并重新归一化
         row_sum = adj.sum(dim=-1, keepdim=True).clamp_min(eps)
         adj = adj / row_sum
         return adj
@@ -267,7 +266,7 @@ class HHGNN(nn.Module):
         else:
             c = self.coeff.view(1, -1).expand(B, -1)
 
-        c = F.softmax(c, dim=-1)  # 稳健优先
+        c = F.softmax(c, dim=-1)  
 
         basis = [embeds]
         X = embeds
