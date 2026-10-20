@@ -40,9 +40,8 @@ class MoEGate(nn.Module):
 class MVN_DDI(nn.Module):
 
 
-    def __init__(self, hidden_dim=128, ddi_type=86, drop=0.2, bal_beta=0.01, moe_topk=2):
+    def __init__(self, hidden_dim=128, ddi_type=86, drop=0.2, moe_topk=2):
         super().__init__()
-        self.bal_beta = bal_beta
         self.hidd_dim = hidden_dim
 
         self.mol_ctx_proj = nn.Sequential(
@@ -67,18 +66,6 @@ class MVN_DDI(nn.Module):
             temperature=1.0
         )
 
-    def _balance_loss(self, probs, routed):
-
-        mean_probs = probs.mean(dim=0)      # [2]
-        mean_routed = routed.mean(dim=0)    # [2]
-
-        uniform = torch.full_like(mean_probs, 1.0 / mean_probs.numel())
-
-        loss_align = torch.sum((mean_routed - mean_probs) ** 2)
-        loss_uniform = torch.sum((mean_routed - uniform) ** 2)
-
-        return loss_align + loss_uniform
-
     def forward(self, score_mol, score_kg, h_pool, t_pool, KG_d1_feat, KG_d2_feat, DDI_type_index):
         # Context encoders
         mol_ctx = self.mol_ctx_proj(torch.cat([h_pool, t_pool], dim=-1))          # [B, H]
@@ -95,9 +82,6 @@ class MVN_DDI(nn.Module):
         kg_score_routed = kg_w * score_kg
         fuse_score = mol_score_routed + kg_score_routed
 
-        bal_loss = None
-        if self.training:
-            bal_loss = self.bal_beta * self._balance_loss(probs, routed)
 
         return {
             "fuse_score": fuse_score,                   # [B]
@@ -107,6 +91,5 @@ class MVN_DDI(nn.Module):
             "kg_weight": kg_w,                         # [B]
             "routed": routed,                          # [B, 2]
             "probs": probs,                            # [B, 2]
-            "mask": mask,                              # [B, 2]
-            "bal_loss": bal_loss
+            "mask": mask                             # [B, 2]
         }
