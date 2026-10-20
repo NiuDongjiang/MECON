@@ -40,7 +40,6 @@ for it in [30]:
     parser.add_argument('--ddi_types', type=int, default=86, help='86 for drugbank, 963 for twosides')
     parser.add_argument('--alpha', type=float, default=1e-2)
     parser.add_argument('--beta', type=float, default=1)
-    parser.add_argument('--bal_beta', type=float, default=1e-2)
     parser.add_argument('--moe_topk', type=int, default=2)
     parser.add_argument('--pareto_iters', type=int, default=it)#30
     args = parser.parse_args()
@@ -280,15 +279,11 @@ for it in [30]:
                 loss_mol, _, _ = loss_fn(pos_out["mol_score_routed"], neg_out["mol_score_routed"])
                 loss_kg, _, _ = loss_fn(pos_out["kg_score_routed"], neg_out["kg_score_routed"])
 
-                bal_loss = 0.0
-                if pos_out["bal_loss"] is not None and neg_out["bal_loss"] is not None:
-                    bal_loss = 0.5 * (pos_out["bal_loss"] + neg_out["bal_loss"])
-
                 pareto_losses = [loss_fuse, loss_mol, loss_kg]
                 alpha = pareto_solver.solve(pareto_losses, model)
                 alpha_hist.append(alpha.cpu().numpy())
 
-                total_loss = alpha[0] * loss_fuse + alpha[1] * loss_mol + alpha[2] * loss_kg + bal_loss
+                total_loss = alpha[0] * loss_fuse + alpha[1] * loss_mol + alpha[2] * loss_kg
 
                 optimizer.zero_grad()
                 total_loss.backward()
