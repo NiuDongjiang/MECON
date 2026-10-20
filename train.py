@@ -380,7 +380,6 @@ for it in [30]:
         hidden_dim=args.hidden_dim,
         ddi_type=args.ddi_types,
         drop=0.2,
-        bal_beta=args.bal_beta,
         moe_topk=args.moe_topk
     ).to(device=device)
 
